@@ -1,0 +1,64 @@
+\documentclass[a4]{report}
+
+
+
+% ******** vmargin settings *********
+\usepackage{vmargin} %This give you full control over the used page area, it maybe not the idea method in Latex to do so, but I wanted to reduce to amount of white space on the page
+\setpapersize{A4}
+\setmargins{3.5cm}%			%linker Rand, left edge
+	  {1cm}%     %oberer Rand, top edge
+           {14.7cm}%		%Textbreite, text width
+           {23.42cm}%   %Texthoehe, text hight
+           {14pt}%			%Kopfzeilenhöhe, header hight
+           {1cm}%   	  %Kopfzeilenabstand, header distance
+           {0pt}%				%Fußzeilenhoehe footer hight
+           {2cm}%    	  %Fusszeilenabstand, footer distance   
+
+
+%Defining text font profile
+\usepackage{t1enc} % as usual
+\usepackage[utf8]{inputenc} % as usual
+\usepackage{times}	
+\usepackage{mathcomp}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{subfigure}
+\usepackage{hyperref}
+
+
+\begin{document}
+%Plan
+%
+
+For any given eigenmode solution in Ansoft HFSS the default results produced are the eigenfrequency $f_{res}$ and the electromagnetic field pattern of the mode. $Q$ is also given if a lossy material (either a finite conductvity or a material with dielectric or magnetic losses)  is defined within the simulation volume. It is possible to calculate the $R_{s}/Q$ of the resonance by evaluating the fields of the resonance, either using HFSS's internal field calculator or by exporting the fields necessary and using an external script/code.
+
+\section{Longitudinal $R_{s}/Q$}
+
+For a structure, the longitudinal $R_{s}/Q$ of the mode is defined by
+
+\begin{equation}
+\frac{R_{s}}{Q}_{\parallel} = \frac{V^{2}}{\omega_{res} W} = \frac{\left| \int^{\infty}_{\infty} E_{z} \left( x,y,z \right) e^{j \omega_{res}z/\left( \beta c \right)} dz \right|^{2}}{\omega_{res} W} = 
+\end{equation}
+
+where $V$ is the voltage seen by a transversing particle, $W$ the stored energy in the cavity due to the mode, $E_{z}$ the longitudinal electric field, $\beta = v/c$, v is the particle velocity, $c$ is the speed of light. From HFSS we acquire a discrete field pattern due to the finite mesh, thus it is necessary to use a discrete integration method to calculate this from simulation results. The choice of algorithm for this is largely left to the user to decide.
+
+It should be noted that the longitudinal $R_{s}/Q$ is dependent on the beam displacement and path through the locale of the eigenmode, thus the beam path should be considered during the analysis, especially for devices where multiple possible beam paths exist.
+
+\section{Transverse $R_{s}/Q$}
+
+The transverse $R_{s}/Q$ of an eigenmode can be calculated in two seperate ways. Using the similar definition of the longitudinal $R_{s}/Q$ but for the transverse fields, the transverse $R_{s}/Q$ for a particle displaced in the x direction (for the y-plane the field components are swapped $x \rightarrow y$, $y \rightarrow x$) is given by \cite{AlexejGrudiev}
+
+\begin{equation}
+\frac{R_{s}}{Q}_{\perp} = \frac{c \left( \int^{\infty}_{\infty} \frac{\partial E_{z} \left( x,y,z \right)}{\partial z} e^{j \omega_{res}z/\left( \beta c \right)} dz\right)^{2}}{\omega_{res}^{2}W} = \frac{ \left( \int^{\infty}_{\infty}  \left( E_{x} \left( x,y,z \right) + c B_{y} \left( x,y,z \right) \right) e^{j \omega_{res}z/\left( \beta c \right)} dz\right)^{2}}{cW}
+\end{equation}
+
+where $B_{x/y}$ and $E_{x/y}$ are the electric field components in the x- and y-directions. It can be seen that $(R_{s}/Q)_{\perp}$ is dependent on the transverse displacement of the beam as with $(R_{s}/Q)_{\parallel}$. For small displacements this dependence on the transverse position can be considered to be linear in non-extreme cases (i.e. far from any material boundaries/non-linear materials) and thus a transverse $R/Q$ normalised to displacement used.
+
+\begin{thebibliography}
+
+\bibitem{AlexejGrudiev}
+\emph{Simulation of Longitudinal and Transverse Impedances of Trapped Modes in LHC Secondary Collimator}, A. Grudiev, CERN-AB-Note-2005-042}
+
+\end{bibliography}
+
+\end{document}
